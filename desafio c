@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define NUM_DE_ARMARIOS 8
+
+void exibir_armarios(unsigned char armarios) {
+    printf("Estado dos armários:\n");
+    for (int i = 0; i < NUM_DE_ARMARIOS; i++) {
+        if (armarios & (1 << i)) {
+            printf("Armário %d: Ocupado\n", i + 1);
+        } else {
+            printf("Armário %d: Livre\n", i + 1);
+        }
+    }
+}
+
+void ocupar_armario(unsigned char *armarios) {
+    unsigned char armarios_livres = ~(*armarios); 
+    if (armarios_livres == 0) {
+        printf("Não há armários livres para ocupar.\n");
+        return;
+    }
+
+    srand(time(NULL)); 
+    int armario_livre = rand() % NUM_DE_ARMARIOS;
+
+    while (!(armarios_livres & (1 << armario_livre))) {
+        armario_livre = rand() % NUM_DE_ARMARIOS;
+    }
+    *armarios |= (1 << armario_livre);
+    printf("Armário %d ocupado.\n", armario_livre + 1);
+}
+
+void liberar_armario(unsigned char *armarios) {
+    int pos;
+    printf("Digite a posição do armário para liberar (1 a 8): ");
+    scanf("%d", &pos);
+
+    if (pos < 1 || pos > NUM_DE_ARMARIOS) {
+        printf("Posição inválida. Tente novamente.\n");
+        return;
+    }
+
+    if (*armarios & (1 << (pos - 1))) {
+        *armarios &= ~(1 << (pos - 1)); 
+        printf("Armário %d liberado.\n", pos);
+    } else {
+        printf("Armário %d já está livre.\n", pos);
+    }
+}
+
+int main() {
+    unsigned char armarios = 0; 
+    int opcao;
+    do {
+        printf("\nMenu:\n");
+        printf("1. Ocupar armário\n");
+        printf("2. Liberar armário\n");
+        printf("3. Sair\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                ocupar_armario(&armarios); 
+                break;
+            case 2:
+                liberar_armario(&armarios); 
+                break;
+            case 3:
+                printf("Saindo do programa.\n");
+                break;
+            default:
+                printf("Opção inválida. Tente novamente.\n");
+        }
+
+        exibir_armarios(armarios);
+        
+    } while (opcao != 3);
+
+    return 0;
+}
