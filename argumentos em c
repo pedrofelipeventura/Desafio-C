@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <stdlib.h> 
+
+int main (int argc, char *argv[]){
+
+int r; 
+
+if(argc!=3){
+    printf("Use: \n\t %s <valor1><valor2>\n", argv[0]);
+    exit(1);
+}
+
+    int a = atoi(argv[1]);
+    int b = atoi(argv[2]);
+    r = a+b;
+
+printf("A soma de a=b é %d", r);
+
+return 0;
+} 
+
+##adicionar gcc -o nomedoarquivo.e nomedoarquivo.c
+##adicionar ./nomedoarquivo.e <valor1><valor2>
